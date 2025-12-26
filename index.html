@@ -1,69 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Git Workflow Project</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Git Workflow Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <!-- Header -->
-    <header class="header">
-        <h1>Git Workflow Project</h1>
-        <p>Hands-on Git & GitHub Version Control Demonstration</p>
-    </header>
+    <!-- Background Animation -->
+    <div class="bg-blur"></div>
 
-    <!-- Navigation -->
-    <nav class="navbar">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>DevOps</h2>
         <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#workflow">Workflow</a></li>
-            <li><a href="#tools">Tools</a></li>
-            <li><a href="#status">Status</a></li>
+            <li class="active">Dashboard</li>
+            <li>Workflow</li>
+            <li>Branches</li>
+            <li>Commits</li>
+            <li>Settings</li>
         </ul>
-    </nav>
+    </aside>
 
     <!-- Main Content -->
-    <main class="container">
+    <main class="main">
 
-        <section id="about" class="card">
-            <h2>About the Project</h2>
+        <!-- Top Bar -->
+        <header class="topbar">
+            <h1>Git Workflow Dashboard</h1>
+            <span class="status-dot">● Active</span>
+        </header>
+
+        <!-- Stats Cards -->
+        <section class="stats">
+            <div class="stat-card">
+                <h3 id="commits">0</h3>
+                <p>Total Commits</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="branches">0</h3>
+                <p>Branches</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="merges">0</h3>
+                <p>Merges</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="conflicts">0</h3>
+                <p>Conflicts Resolved</p>
+            </div>
+        </section>
+
+        <!-- Workflow Section -->
+        <section class="card animate">
+            <h2>Git Workflow</h2>
+            <div class="workflow">
+                <span>Init</span>
+                <span>Commit</span>
+                <span>Branch</span>
+                <span>Merge</span>
+                <span>Resolve</span>
+                <span>Push</span>
+            </div>
+        </section>
+
+        <!-- Activity Section -->
+        <section class="card animate delay">
+            <h2>Project Activity</h2>
             <p>
-                This project demonstrates real-world Git Bash and GitHub workflows
-                including branching, merging, conflict resolution, and remote repository
-                management using a simple web-based application.
+                This dashboard visually represents Git and GitHub operations
+                including branching, merging, and conflict resolution using
+                professional UI and animation techniques.
             </p>
         </section>
 
-        <section id="workflow" class="card">
-            <h2>Git Workflow</h2>
-            <ul>
-                <li>Repository Initialization</li>
-                <li>Commit & Branch Creation</li>
-                <li>Merge Operations</li>
-                <li>Conflict Resolution</li>
-                <li>Push to GitHub</li>
-            </ul>
-        </section>
-
-        <section id="tools" class="card">
-            <h2>Tools Used</h2>
-            <p>Git Bash, GitHub, HTML, CSS, JavaScript, VS Code</p>
-        </section>
-
-        <section id="status" class="card status">
-            <h2>Project Status</h2>
-            <p id="statusText">Checking project status...</p>
-            <button onclick="checkStatus()">Check Status</button>
-        </section>
-
     </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p>© 2025 Git Workflow Project | DevOps Practice</p>
-    </footer>
 
     <script src="script.js"></script>
 </body>
