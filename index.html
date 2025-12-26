@@ -2,11 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Git Workflow Project</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>Welcome to Git Workflow Project</h1>
-    <p>This project demonstrates Git and GitHub workflows.</p>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>Git Workflow Project</h1>
+        <p>Hands-on Git & GitHub Version Control Demonstration</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#workflow">Workflow</a></li>
+            <li><a href="#tools">Tools</a></li>
+            <li><a href="#status">Status</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+
+        <section id="about" class="card">
+            <h2>About the Project</h2>
+            <p>
+                This project demonstrates real-world Git Bash and GitHub workflows
+                including branching, merging, conflict resolution, and remote repository
+                management using a simple web-based application.
+            </p>
+        </section>
+
+        <section id="workflow" class="card">
+            <h2>Git Workflow</h2>
+            <ul>
+                <li>Repository Initialization</li>
+                <li>Commit & Branch Creation</li>
+                <li>Merge Operations</li>
+                <li>Conflict Resolution</li>
+                <li>Push to GitHub</li>
+            </ul>
+        </section>
+
+        <section id="tools" class="card">
+            <h2>Tools Used</h2>
+            <p>Git Bash, GitHub, HTML, CSS, JavaScript, VS Code</p>
+        </section>
+
+        <section id="status" class="card status">
+            <h2>Project Status</h2>
+            <p id="statusText">Checking project status...</p>
+            <button onclick="checkStatus()">Check Status</button>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 Git Workflow Project | DevOps Practice</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
