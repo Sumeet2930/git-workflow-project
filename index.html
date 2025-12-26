@@ -3,85 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Git Workflow Dashboard</title>
+    <title>Student Portfolio</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <!-- Background Glow -->
-    <div class="bg-glow"></div>
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <h2>DevOps</h2>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <h2 class="logo">MyPortfolio</h2>
         <ul>
-            <li class="active">Dashboard</li>
-            <li>Workflow</li>
-            <li>Branches</li>
-            <li>Commits</li>
-            <li>Settings</li>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
         </ul>
-    </aside>
+    </nav>
 
-    <!-- Main Content -->
-    <main class="main">
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1>Hello, I'm <span>Student Name</span></h1>
+        <p>A Computer Science Student & Aspiring Developer</p>
+        <button onclick="scrollToSection('contact')">Hire Me</button>
+    </section>
 
-        <!-- Top Bar -->
-        <header class="topbar">
-            <h1>Git Workflow Dashboard</h1>
-            <span class="status">● Active</span>
-        </header>
+    <!-- About -->
+    <section id="about" class="section">
+        <h2>About Me</h2>
+        <p>
+            I am a Computer Science student passionate about web development
+            and learning new technologies. I enjoy building simple and
+            meaningful projects using HTML, CSS, and JavaScript.
+        </p>
+    </section>
 
-        <!-- Stats -->
-        <section class="stats">
-            <div class="stat-card">
-                <h3 id="commits">28</h3>
-                <p>Total Commits</p>
+    <!-- Skills -->
+    <section id="skills" class="section dark">
+        <h2>My Skills</h2>
+        <div class="skills">
+            <div class="skill">HTML</div>
+            <div class="skill">CSS</div>
+            <div class="skill">JavaScript</div>
+            <div class="skill">Git & GitHub</div>
+            <div class="skill">Basics of Python</div>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="section">
+        <h2>Projects</h2>
+        <div class="projects">
+            <div class="project-card">
+                <h3>Portfolio Website</h3>
+                <p>Personal portfolio built using HTML, CSS, and JavaScript.</p>
             </div>
-            <div class="stat-card">
-                <h3 id="branches">6</h3>
-                <p>Branches</p>
+            <div class="project-card">
+                <h3>College Event Website</h3>
+                <p>Event registration website with form validation.</p>
             </div>
-            <div class="stat-card">
-                <h3 id="merges">12</h3>
-                <p>Merges</p>
+            <div class="project-card">
+                <h3>Quiz Application</h3>
+                <p>Interactive quiz with score calculation.</p>
             </div>
-            <div class="stat-card">
-                <h3 id="conflicts">4</h3>
-                <p>Conflicts Resolved</p>
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Workflow -->
-        <section class="card">
-            <h2>Git Workflow</h2>
-            <div class="workflow">
-                <button onclick="runAction('init')">Init</button>
-                <button onclick="runAction('commit')">Commit</button>
-                <button onclick="runAction('branch')">Branch</button>
-                <button onclick="runAction('merge')">Merge</button>
-                <button onclick="runAction('resolve')">Resolve</button>
-                <button onclick="runAction('push')">Push</button>
-            </div>
-        </section>
+    <!-- Contact -->
+    <section id="contact" class="section dark">
+        <h2>Contact Me</h2>
+        <form onsubmit="submitForm(event)">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <p id="msg"></p>
+    </section>
 
-        <!-- Activity Log -->
-        <section class="card">
-            <h2>Activity Log</h2>
-            <ul id="log"></ul>
-        </section>
-
-        <!-- Project Info -->
-        <section class="card">
-            <h2>Project Activity</h2>
-            <p>
-                This dashboard simulates real Git and GitHub operations using
-                interactive UI components, animations, and JavaScript logic
-                to represent DevOps workflows.
-            </p>
-        </section>
-
-    </main>
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Student Portfolio | All Rights Reserved</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
