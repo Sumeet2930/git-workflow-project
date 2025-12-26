@@ -13,12 +13,170 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+    <!-- Onboarding Wizard Overlay -->
+    <div id="builder-overlay" class="builder-overlay">
+      <div class="builder-card">
+        <div class="builder-header">
+          <h2>Create Your Portfolio<span>.</span></h2>
+          <p>Tell us a bit about yourself to generate your premium site.</p>
+        </div>
+        <form id="builder-form" class="builder-form">
+          <div class="form-step active" data-step="1">
+            <h3>Basic Information</h3>
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" name="name" placeholder="Sumeet" required />
+            </div>
+            <div class="form-group">
+              <label>Professional Roles (Comma separated)</label>
+              <input
+                type="text"
+                name="roles"
+                placeholder="Developer, Designer, Innovator"
+                required
+              />
+            </div>
+            <button type="button" class="primary-btn next-step">
+              Next: About & Impact
+            </button>
+          </div>
+
+          <div class="form-step" data-step="2">
+            <h3>About & Impact</h3>
+            <div class="form-group">
+              <label>Project Name / Solution</label>
+              <input
+                type="text"
+                name="solutionName"
+                placeholder="BridgeGap"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Real Life Problem Statement</label>
+              <textarea
+                name="problem"
+                placeholder="Finding quality mentorship is a barrier..."
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label>Proposed Solution Description</label>
+              <textarea
+                name="solution"
+                placeholder="A decentralized platform connecting students..."
+                required
+              ></textarea>
+            </div>
+            <div class="step-btns">
+              <button type="button" class="secondary-btn prev-step">
+                Back
+              </button>
+              <button type="button" class="primary-btn next-step">
+                Next: Featured Projects
+              </button>
+            </div>
+          </div>
+
+          <div class="form-step" data-step="3">
+            <h3>Featured Projects</h3>
+            <div class="project-inputs">
+              <div class="project-input-group">
+                <input
+                  type="text"
+                  name="p1_title"
+                  placeholder="Project 1 Title"
+                  required
+                />
+                <textarea
+                  name="p1_desc"
+                  placeholder="Project 1 Description"
+                  required
+                ></textarea>
+                <input
+                  type="text"
+                  name="p1_tech"
+                  placeholder="HTML, CSS, JS"
+                  required
+                />
+              </div>
+              <div class="project-input-group">
+                <input
+                  type="text"
+                  name="p2_title"
+                  placeholder="Project 2 Title"
+                  required
+                />
+                <textarea
+                  name="p2_desc"
+                  placeholder="Project 2 Description"
+                  required
+                ></textarea>
+                <input
+                  type="text"
+                  name="p2_tech"
+                  placeholder="React, Node"
+                  required
+                />
+              </div>
+              <div class="project-input-group">
+                <input
+                  type="text"
+                  name="p3_title"
+                  placeholder="Project 3 Title"
+                />
+                <textarea
+                  name="p3_desc"
+                  placeholder="Project 3 Description"
+                ></textarea>
+                <input type="text" name="p3_tech" placeholder="Python, AI" />
+              </div>
+            </div>
+            <div class="step-btns">
+              <button type="button" class="secondary-btn prev-step">
+                Back
+              </button>
+              <button type="button" class="primary-btn next-step">
+                Next: Final Touches
+              </button>
+            </div>
+          </div>
+
+          <div class="form-step" data-step="4">
+            <h3>Final Touches</h3>
+            <div class="form-group">
+              <label>Professional Bio</label>
+              <textarea
+                name="bio"
+                placeholder="I am a Computer Science student passionate about..."
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label>Theme Primary Color</label>
+              <input type="color" name="primaryColor" value="#38bdf8" />
+            </div>
+            <div class="step-btns">
+              <button type="button" class="secondary-btn prev-step">
+                Back
+              </button>
+              <button type="submit" class="primary-btn">
+                Generate Portfolio
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <div class="custom-cursor"></div>
 
     <!-- Navbar -->
     <nav class="navbar">
       <div class="nav-container">
-        <h2 class="logo">Sumeet<span>.</span></h2>
+        <h2 class="logo">
+          <span id="dynamic-logo-name">Sumeet</span><span>.</span>
+        </h2>
         <div class="menu-btn" id="menuBtn">
           <span></span>
           <span></span>
@@ -39,7 +197,11 @@
     <section id="home" class="hero">
       <div class="hero-content reveal">
         <span class="badge">Available for Work</span>
-        <h1>Crafting Digital <br /><span id="typing-text"></span></h1>
+        <h1>
+          <span id="dynamic-hero-name">Sumeet's</span> Digital <br /><span
+            id="typing-text"
+          ></span>
+        </h1>
         <p>
           Computer Science Student & Full-stack Enthusiast focused on building
           meaningful solutions for real-world problems.
@@ -62,7 +224,7 @@
         <h2 class="section-title">About Me</h2>
         <div class="about-grid">
           <div class="about-text">
-            <p>
+            <p id="dynamic-bio">
               I am a Computer Science student passionate about the intersection
               of design and technology. My journey in web development started
               with a curiosity for how things work on the internet, and it has
@@ -83,7 +245,7 @@
               <span class="icon">⚠️</span>
               <h3>The Problem</h3>
             </div>
-            <p>
+            <p id="dynamic-problem">
               Finding quality mentorship in tech is often a barrier for students
               from non-tier-1 cities, leading to a massive talent-opportunity
               gap.
@@ -94,8 +256,8 @@
               <span class="icon">🚀</span>
               <h3>Proposed Solution</h3>
             </div>
-            <h4>BridgeGap</h4>
-            <p>
+            <h4 id="dynamic-solution-name">BridgeGap</h4>
+            <p id="dynamic-solution-desc">
               A decentralized platform connecting students with industry mentors
               based on shared project interests and skill levels, democratizing
               access to professional guidance.
@@ -156,46 +318,8 @@
           <button class="filter-btn" data-filter="app">App</button>
           <button class="filter-btn" data-filter="ai">AI</button>
         </div>
-        <div class="projects-grid">
-          <div class="project-card reveal-item" data-category="web">
-            <div class="project-glow"></div>
-            <div class="project-info">
-              <h3>Portfolio v2</h3>
-              <p>
-                A modern, glassmorphism-based portfolio with fluid animations
-                and responsive layout.
-              </p>
-              <div class="project-tech">
-                <span>HTML</span><span>CSS</span><span>JS</span>
-              </div>
-            </div>
-          </div>
-          <div class="project-card reveal-item" data-category="web">
-            <div class="project-glow"></div>
-            <div class="project-info">
-              <h3>EduLink</h3>
-              <p>
-                College event management system with real-time updates and
-                secure registration.
-              </p>
-              <div class="project-tech">
-                <span>React</span><span>Firebase</span>
-              </div>
-            </div>
-          </div>
-          <div class="project-card reveal-item" data-category="ai">
-            <div class="project-glow"></div>
-            <div class="project-info">
-              <h3>QuizGen</h3>
-              <p>
-                AI-powered quiz application that generates questions from text
-                inputs.
-              </p>
-              <div class="project-tech">
-                <span>Python</span><span>OpenAI</span>
-              </div>
-            </div>
-          </div>
+        <div class="projects-grid" id="dynamic-projects-grid">
+          <!-- Projects will be injected here -->
         </div>
       </div>
     </section>
@@ -257,10 +381,12 @@
       </div>
     </section>
 
-    <!-- Footer -->
     <footer>
       <div class="footer-content">
         <p>© 2025 Sumeet | Built with passion & precision</p>
+        <div class="footer-actions">
+          <button id="edit-profile-btn" class="glass-btn">Edit Profile</button>
+        </div>
         <div class="social-links">
           <a href="#">LinkedIn</a>
           <a href="#">GitHub</a>
