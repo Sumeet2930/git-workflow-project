@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Git Workflow Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <!-- Header -->
-    <header class="header">
-        <h1>Git Workflow Project</h1>
-        <p>Hands-on Git & GitHub Version Control Demonstration</p>
-    </header>
+    <!-- Background Glow -->
+    <div class="bg-glow"></div>
 
     <!-- Sidebar -->
     <aside class="sidebar">
@@ -32,49 +29,55 @@
         <!-- Top Bar -->
         <header class="topbar">
             <h1>Git Workflow Dashboard</h1>
-            <span class="status-dot">● Active</span>
+            <span class="status">● Active</span>
         </header>
 
-        <!-- Stats Cards -->
+        <!-- Stats -->
         <section class="stats">
             <div class="stat-card">
-                <h3 id="commits">0</h3>
+                <h3 id="commits">28</h3>
                 <p>Total Commits</p>
             </div>
             <div class="stat-card">
-                <h3 id="branches">0</h3>
+                <h3 id="branches">6</h3>
                 <p>Branches</p>
             </div>
             <div class="stat-card">
-                <h3 id="merges">0</h3>
+                <h3 id="merges">12</h3>
                 <p>Merges</p>
             </div>
             <div class="stat-card">
-                <h3 id="conflicts">0</h3>
+                <h3 id="conflicts">4</h3>
                 <p>Conflicts Resolved</p>
             </div>
         </section>
 
-        <!-- Workflow Section -->
-        <section class="card animate">
+        <!-- Workflow -->
+        <section class="card">
             <h2>Git Workflow</h2>
             <div class="workflow">
-                <span>Init</span>
-                <span>Commit</span>
-                <span>Branch</span>
-                <span>Merge</span>
-                <span>Resolve</span>
-                <span>Push</span>
+                <button onclick="runAction('init')">Init</button>
+                <button onclick="runAction('commit')">Commit</button>
+                <button onclick="runAction('branch')">Branch</button>
+                <button onclick="runAction('merge')">Merge</button>
+                <button onclick="runAction('resolve')">Resolve</button>
+                <button onclick="runAction('push')">Push</button>
             </div>
         </section>
 
-        <!-- Activity Section -->
-        <section class="card animate delay">
+        <!-- Activity Log -->
+        <section class="card">
+            <h2>Activity Log</h2>
+            <ul id="log"></ul>
+        </section>
+
+        <!-- Project Info -->
+        <section class="card">
             <h2>Project Activity</h2>
             <p>
-                This dashboard visually represents Git and GitHub operations
-                including branching, merging, and conflict resolution using
-                professional UI and animation techniques.
+                This dashboard simulates real Git and GitHub operations using
+                interactive UI components, animations, and JavaScript logic
+                to represent DevOps workflows.
             </p>
         </section>
 
