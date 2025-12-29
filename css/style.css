@@ -477,6 +477,18 @@ body {
     resize: vertical;
 }
 
+.form-group input.error, .form-group textarea.error,
+.project-input-group input.error, .project-input-group textarea.error {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.form-group input[type="color"] {
+    padding: 0.5rem;
+    height: 50px;
+    cursor: pointer;
+}
+
 /* Footer */
 footer {
     padding: 4rem 2rem;

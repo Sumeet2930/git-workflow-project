@@ -17,11 +17,36 @@ function initBuilder() {
 }
 
 // Multi-step Navigation
+function validateStep(index) {
+    const step = steps[index];
+    const requiredFields = step.querySelectorAll('[required]');
+    let isValid = true;
+
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            isValid = false;
+            field.classList.add('error');
+            // Remove error class on input
+            field.addEventListener('input', () => field.classList.remove('error'), { once: true });
+        } else {
+            field.classList.remove('error');
+        }
+    });
+
+    if (!isValid) {
+        const firstError = step.querySelector('.error');
+        if (firstError) firstError.focus();
+    }
+    return isValid;
+}
+
 document.querySelectorAll('.next-step').forEach(btn => {
     btn.addEventListener('click', () => {
-        steps[currentStep].classList.remove('active');
-        currentStep++;
-        steps[currentStep].classList.add('active');
+        if (validateStep(currentStep)) {
+            steps[currentStep].classList.remove('active');
+            currentStep++;
+            steps[currentStep].classList.add('active');
+        }
     });
 });
 
@@ -37,11 +62,14 @@ document.querySelectorAll('.prev-step').forEach(btn => {
 if (builderForm) {
     builderForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        
+        if (!validateStep(currentStep)) return;
+
         const formData = new FormData(builderForm);
         
         const data = {
-            name: formData.get('name'),
-            roles: formData.get('roles').split(',').map(r => r.trim()),
+            name: formData.get('name') || 'Sumeet',
+            roles: (formData.get('roles') || '').split(',').map(r => r.trim()).filter(r => r),
             solutionName: formData.get('solutionName'),
             problem: formData.get('problem'),
             solution: formData.get('solution'),
@@ -51,19 +79,19 @@ if (builderForm) {
                 {
                     title: formData.get('p1_title'),
                     desc: formData.get('p1_desc'),
-                    tech: formData.get('p1_tech').split(',').map(t => t.trim())
+                    tech: (formData.get('p1_tech') || '').split(',').map(t => t.trim()).filter(t => t)
                 },
                 {
                     title: formData.get('p2_title'),
                     desc: formData.get('p2_desc'),
-                    tech: formData.get('p2_tech').split(',').map(t => t.trim())
+                    tech: (formData.get('p2_tech') || '').split(',').map(t => t.trim()).filter(t => t)
                 },
                 {
                     title: formData.get('p3_title'),
                     desc: formData.get('p3_desc'),
-                    tech: (formData.get('p3_tech') || '').split(',').map(t => t.trim())
+                    tech: (formData.get('p3_tech') || '').split(',').map(t => t.trim()).filter(t => t)
                 }
-            ].filter(p => p.title) // Only keep projects with a title
+            ].filter(p => p.title && p.title.trim()) // Only keep projects with a title
         };
 
         localStorage.setItem('portfolio_builder_data', JSON.stringify(data));
