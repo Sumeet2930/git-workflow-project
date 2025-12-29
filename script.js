@@ -69,7 +69,7 @@ if (builderForm) {
         localStorage.setItem('portfolio_builder_data', JSON.stringify(data));
         injectPortfolioData(data);
         
-        // Hide overlay with animation
+        // Hide overlay with animation - ensured closure
         builderOverlay.style.opacity = '0';
         setTimeout(() => {
             builderOverlay.classList.add('hidden');
@@ -81,15 +81,25 @@ if (builderForm) {
 
 // Data Injection
 function injectPortfolioData(data) {
+    if (!data) return;
+
     // Basic Info
-    document.getElementById('dynamic-logo-name').textContent = data.name;
-    document.getElementById('dynamic-hero-name').textContent = data.name + "'s";
-    document.getElementById('dynamic-bio').textContent = data.bio;
+    const logoName = document.getElementById('dynamic-logo-name');
+    const heroName = document.getElementById('dynamic-hero-name');
+    const bio = document.getElementById('dynamic-bio');
+
+    if (logoName) logoName.textContent = data.name;
+    if (heroName) heroName.textContent = data.name + "'s";
+    if (bio) bio.textContent = data.bio;
     
     // Impact Section
-    document.getElementById('dynamic-problem').textContent = data.problem;
-    document.getElementById('dynamic-solution-name').textContent = data.solutionName;
-    document.getElementById('dynamic-solution-desc').textContent = data.solution;
+    const problem = document.getElementById('dynamic-problem');
+    const solutionName = document.getElementById('dynamic-solution-name');
+    const solutionDesc = document.getElementById('dynamic-solution-desc');
+
+    if (problem) problem.textContent = data.problem;
+    if (solutionName) solutionName.textContent = data.solutionName;
+    if (solutionDesc) solutionDesc.textContent = data.solution;
     
     // Projects Injection
     const grid = document.getElementById('dynamic-projects-grid');
@@ -132,10 +142,11 @@ function injectPortfolioData(data) {
     window.portfolioRoles = data.roles; 
     
     // Update Theme Color
-    document.documentElement.style.setProperty('--primary', data.primaryColor);
-    // Auto-generate a darker version for hovers
-    const darkerColor = darkenColor(data.primaryColor, 20);
-    document.documentElement.style.setProperty('--primary-dark', darkerColor);
+    if (data.primaryColor) {
+        document.documentElement.style.setProperty('--primary', data.primaryColor);
+        const darkerColor = darkenColor(data.primaryColor, 20);
+        document.documentElement.style.setProperty('--primary-dark', darkerColor);
+    }
     
     // Restart typing effect if active
     if (typingTimeout) clearTimeout(typingTimeout);
@@ -143,6 +154,9 @@ function injectPortfolioData(data) {
     wordIndex = 0;
     isDeleting = false;
     type();
+
+    // Store globally for chatbot context
+    window.currentPortfolioData = data;
 }
 
 // Edit Profile Button
@@ -300,9 +314,227 @@ function darkenColor(hex, percent) {
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
+// --- AI Chatbot & Export Logic ---
+
+class Chatbot {
+    constructor() {
+        this.container = document.getElementById('ai-chatbot');
+        this.trigger = document.getElementById('chatbot-trigger');
+        this.window = document.getElementById('chat-window');
+        this.closeBtn = document.getElementById('close-chat');
+        this.messagesContainer = document.getElementById('chat-messages');
+        this.input = document.getElementById('chat-input');
+        this.sendBtn = document.getElementById('send-btn');
+        this.voiceBtn = document.getElementById('voice-btn');
+        this.ttsToggle = document.getElementById('tts-toggle');
+        
+        this.isVoiceEnabled = false;
+        this.isRecording = false;
+        this.recognition = null;
+        
+        this.init();
+    }
+
+    init() {
+        this.trigger.addEventListener('click', () => this.toggleWindow());
+        this.closeBtn.addEventListener('click', () => this.toggleWindow());
+        this.sendBtn.addEventListener('click', () => this.handleSendMessage());
+        this.input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.handleSendMessage();
+        });
+
+        this.ttsToggle.addEventListener('click', () => {
+            this.isVoiceEnabled = !this.isVoiceEnabled;
+            this.ttsToggle.querySelector('.icon').textContent = this.isVoiceEnabled ? '🔊' : '🔇';
+            this.ttsToggle.classList.toggle('active', this.isVoiceEnabled);
+        });
+
+        this.initVoice();
+    }
+
+    toggleWindow() {
+        this.window.classList.toggle('active');
+        if (this.window.classList.contains('active')) {
+            this.input.focus();
+        }
+    }
+
+    addMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${sender}`;
+        msgDiv.textContent = text;
+        this.messagesContainer.appendChild(msgDiv);
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        
+        if (sender === 'bot' && this.isVoiceEnabled) {
+            this.speak(text);
+        }
+    }
+
+    async handleSendMessage() {
+        const text = this.input.value.trim();
+        if (!text) return;
+
+        this.addMessage(text, 'user');
+        this.input.value = '';
+        
+        // Show typing indicator
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message bot typing';
+        typingDiv.textContent = '...';
+        this.messagesContainer.appendChild(typingDiv);
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+
+        try {
+            const response = await this.getAIResponse(text);
+            this.messagesContainer.removeChild(typingDiv);
+            this.addMessage(response, 'bot');
+        } catch (error) {
+            this.messagesContainer.removeChild(typingDiv);
+            this.addMessage("Sorry, I'm having trouble connecting right now.", 'bot');
+        }
+    }
+
+    async getAIResponse(userText) {
+        const data = window.currentPortfolioData || JSON.parse(localStorage.getItem('portfolio_builder_data') || '{}');
+        const name = data.name || 'Awarthi';
+        
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        const lowerText = userText.toLowerCase();
+        
+        // Context-aware responses
+        if (lowerText.includes('name') || lowerText.includes('who are you')) {
+            return `This is ${name}'s Professional Portfolio Generator context! I'm the AI assistant here to support you.`;
+        }
+        if (lowerText.includes('project') || lowerText.includes('work')) {
+            const projects = data.projects?.map(p => p.title).join(', ') || 'innovative applications';
+            return `You can explore ${name}'s key projects like ${projects}. Each one represents a unique challenge solved!`;
+        }
+        if (lowerText.includes('skill') || lowerText.includes('tech')) {
+            return `${name} is proficient in technologies like ${data.roles?.join(', ') || 'web development and design'}.`;
+        }
+        if (lowerText.includes('hello') || lowerText.includes('hi')) {
+            return `Hello! I'm ${name}'s AI assistant. I can tell you about their projects, skills, or professional bio. What would you like to know?`;
+        }
+        if (lowerText.includes('contact') || lowerText.includes('reach')) {
+            return `You can reach out to ${name} via the contact form at the bottom of the page!`;
+        }
+        
+        // Highly robust default response
+        return `I'm here to help you learn more about ${name}. You can ask me about their projects, expertise, or the Professional Portfolio Generator itself. What can I help you find?`;
+    }
+
+    initVoice() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            this.recognition = new SpeechRecognition();
+            this.recognition.continuous = false;
+            this.recognition.interimResults = false;
+
+            this.recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                this.input.value = transcript;
+                this.handleSendMessage();
+                this.stopRecording();
+            };
+
+            this.recognition.onerror = () => this.stopRecording();
+            this.recognition.onend = () => this.stopRecording();
+
+            this.voiceBtn.addEventListener('click', () => {
+                if (this.isRecording) {
+                    this.stopRecording();
+                } else {
+                    this.startRecording();
+                }
+            });
+        } else {
+            this.voiceBtn.style.display = 'none';
+        }
+    }
+
+    startRecording() {
+        this.isRecording = true;
+        this.voiceBtn.classList.add('recording');
+        this.recognition.start();
+    }
+
+    stopRecording() {
+        this.isRecording = false;
+        this.voiceBtn.classList.remove('recording');
+        try { this.recognition.stop(); } catch(e) {}
+    }
+
+    speak(text) {
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+// Export Functions
+function exportToJSON() {
+    const data = localStorage.getItem('portfolio_builder_data');
+    if (!data) return alert("No portfolio data found!");
+    
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'portfolio-data.json';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function exportToPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const data = JSON.parse(localStorage.getItem('portfolio_builder_data') || '{}');
+
+    if (!data.name) return alert("No portfolio data found!");
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.text(data.name, 20, 30);
+    
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "normal");
+    doc.text(data.roles?.join(' | ') || '', 20, 40);
+    
+    doc.line(20, 45, 190, 45);
+    
+    doc.setFont("helvetica", "bold");
+    doc.text("Professional Bio", 20, 60);
+    doc.setFont("helvetica", "normal");
+    const bioLines = doc.splitTextToSize(data.bio || '', 160);
+    doc.text(bioLines, 20, 70);
+    
+    doc.setFont("helvetica", "bold");
+    doc.text("Impact Statement", 20, 100);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Problem: ${data.problem}`, 20, 110, { maxWidth: 160 });
+    doc.text(`Solution: ${data.solutionName} - ${data.solution}`, 20, 130, { maxWidth: 160 });
+    
+    doc.setFont("helvetica", "bold");
+    doc.text("Featured Projects", 20, 160);
+    doc.setFont("helvetica", "normal");
+    let y = 170;
+    data.projects?.forEach(p => {
+        doc.text(`• ${p.title}: ${p.desc}`, 20, y, { maxWidth: 160 });
+        y += 15;
+    });
+
+    doc.save(`${data.name.replace(/\s+/g, '-')}-portfolio.pdf`);
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
     initBuilder();
+    new Chatbot();
     if (localStorage.getItem('portfolio_builder_data')) {
         type();
     }

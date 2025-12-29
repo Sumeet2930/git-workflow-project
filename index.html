@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sumeet | Developer Portfolio</title>
+    <title>Sumeet | Professional Portfolio Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,7 +17,7 @@
     <div id="builder-overlay" class="builder-overlay">
       <div class="builder-card">
         <div class="builder-header">
-          <h2>Create Your Portfolio<span>.</span></h2>
+          <h2>Professional Portfolio Generator<span>.</span></h2>
           <p>Tell us a bit about yourself to generate your premium site.</p>
         </div>
         <form id="builder-form" class="builder-form">
@@ -361,7 +361,7 @@
           <form class="contact-form" onsubmit="submitForm(event)">
             <div class="form-group">
               <label>Name</label>
-              <input type="text" placeholder="John Doe" required />
+              <input type="text" placeholder="Awarthi" required />
             </div>
             <div class="form-group">
               <label>Email</label>
@@ -385,6 +385,16 @@
       <div class="footer-content">
         <p>© 2025 Sumeet | Built with passion & precision</p>
         <div class="footer-actions">
+          <button
+            id="export-json-btn"
+            class="glass-btn"
+            onclick="exportToJSON()"
+          >
+            Export Data (JSON)
+          </button>
+          <button id="export-pdf-btn" class="glass-btn" onclick="exportToPDF()">
+            Download PDF
+          </button>
           <button id="edit-profile-btn" class="glass-btn">Edit Profile</button>
         </div>
         <div class="social-links">
@@ -395,6 +405,59 @@
       </div>
     </footer>
 
+    <!-- AI Chatbot UI -->
+    <div class="ai-chatbot-container" id="ai-chatbot">
+      <div class="chatbot-trigger" id="chatbot-trigger">
+        <div class="robot-avatar">
+          <div class="robot-head">
+            <div class="eyes">
+              <div class="eye"></div>
+              <div class="eye"></div>
+            </div>
+          </div>
+          <div class="robot-body"></div>
+        </div>
+        <span class="trigger-text">AI Assistant</span>
+      </div>
+
+      <div class="chat-window" id="chat-window">
+        <div class="chat-header">
+          <div class="bot-info">
+            <div class="status-dot"></div>
+            <span>Portfolio AI</span>
+          </div>
+          <div class="chat-actions">
+            <button id="tts-toggle" class="icon-btn" title="Toggle Voice">
+              <span class="icon">🔊</span>
+            </button>
+            <button id="close-chat" class="icon-btn">✕</button>
+          </div>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+          <div class="message bot">
+            Hello! I'm your AI assistant. I know everything about this
+            portfolio. How can I help you today?
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="chat-input"
+              placeholder="Type a message..."
+              autocomplete="off"
+            />
+            <button id="voice-btn" class="icon-btn" title="Speak">
+              <span class="icon">🎤</span>
+            </button>
+          </div>
+          <button id="send-btn" class="primary-btn">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- jsPDF for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

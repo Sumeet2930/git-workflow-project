@@ -1,4 +1,4 @@
-# Project Documentation: Advanced Developer Portfolio
+# Project Documentation: Professional Portfolio Generator
 
 This document provides a comprehensive overview of the webpage structure, planning ideas, workflow, and internal mechanics of the portfolio.
 
