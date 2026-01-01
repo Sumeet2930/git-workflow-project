@@ -4,16 +4,89 @@ const builderForm = document.getElementById('builder-form');
 const steps = document.querySelectorAll('.form-step');
 let currentStep = 0;
 
+
+// Skills Data
+const availableSkills = {
+    "Languages": ["JavaScript", "Python", "Java", "C++", "TypeScript", "Go"],
+    "Frontend": ["React", "Vue", "Next.js", "Tailwind CSS", "Sass", "Redux"],
+    "Backend": ["Node.js", "Express", "Django", "FastAPI", "Postgres", "MongoDB"],
+    "Tools": ["Docker", "Git", "AWS", "Figma", "Firebase", "Linux"]
+};
+let selectedSkills = new Set();
+let profileImageBase64 = null; // New variable for image persistence
+
 // Initialize Builder
 function initBuilder() {
+    renderSkillSelector();
+    
+    // Image Handling
+    const imgInput = document.getElementById('profile-image-input');
+    if (imgInput) {
+        imgInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    profileImageBase64 = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
     const savedData = localStorage.getItem('portfolio_builder_data');
     if (savedData) {
         const data = JSON.parse(savedData);
+        if (data.skills) {
+             data.skills.forEach(s => selectedSkills.add(s));
+             renderSkillSelector(); // Re-render to show selected
+        }
+        if (data.profileImage) {
+            profileImageBase64 = data.profileImage;
+        }
         injectPortfolioData(data);
         builderOverlay.classList.add('hidden');
     } else {
         builderOverlay.classList.remove('hidden');
     }
+}
+
+function renderSkillSelector() {
+    const root = document.getElementById('skills-selection-root');
+    if (!root) return;
+    
+    root.innerHTML = '';
+    
+    Object.entries(availableSkills).forEach(([category, skills]) => {
+        const catDiv = document.createElement('div');
+        catDiv.className = 'skill-category';
+        
+        catDiv.innerHTML = `<h4>${category}</h4>`;
+        
+        const chipsContainer = document.createElement('div');
+        chipsContainer.className = 'skill-chips';
+        
+        skills.forEach(skill => {
+            const chip = document.createElement('div');
+            chip.className = `skill-chip ${selectedSkills.has(skill) ? 'selected' : ''}`;
+            chip.textContent = skill;
+            
+            chip.addEventListener('click', () => {
+                if (selectedSkills.has(skill)) {
+                    selectedSkills.delete(skill);
+                    chip.classList.remove('selected');
+                } else {
+                    selectedSkills.add(skill);
+                    chip.classList.add('selected');
+                }
+            });
+            
+            chipsContainer.appendChild(chip);
+        });
+        
+        catDiv.appendChild(chipsContainer);
+        root.appendChild(catDiv);
+    });
 }
 
 // Multi-step Navigation
@@ -65,10 +138,17 @@ if (builderForm) {
         
         if (!validateStep(currentStep)) return;
 
+        // Custom validation for skills (optional, ensure at least 1?)
+        if (selectedSkills.size === 0 && currentStep === 1) { 
+             // Ideally we'd show an error, but let's allow empty for now or add visual feedback
+        }
+
         const formData = new FormData(builderForm);
         
         const data = {
             name: formData.get('name') || 'Sumeet',
+            profileImage: profileImageBase64, // Include the image
+            skills: Array.from(selectedSkills),
             roles: (formData.get('roles') || '').split(',').map(r => r.trim()).filter(r => r),
             solutionName: formData.get('solutionName'),
             problem: formData.get('problem'),
@@ -102,7 +182,8 @@ if (builderForm) {
         setTimeout(() => {
             builderOverlay.classList.add('hidden');
             // Re-trigger scroll reveal for the new content
-            document.querySelectorAll('.reveal, .reveal-item').forEach(el => revealObserver.observe(el));
+            const revealElements = document.querySelectorAll('.reveal, .reveal-item, .reveal-left, .reveal-right');
+            revealElements.forEach(el => revealObserver.observe(el));
         }, 500);
     });
 }
@@ -128,6 +209,30 @@ function injectPortfolioData(data) {
     if (problem) problem.textContent = data.problem;
     if (solutionName) solutionName.textContent = data.solutionName;
     if (solutionDesc) solutionDesc.textContent = data.solution;
+    
+    // Skills Injection
+    const skillsGrid = document.getElementById('dynamic-skills-grid');
+    if (skillsGrid && data.skills) {
+        skillsGrid.innerHTML = '';
+        data.skills.forEach(skill => {
+            const tag = document.createElement('div');
+            tag.className = 'skill-tag reveal-item';
+            tag.innerHTML = `<span>+</span> ${skill}`;
+            skillsGrid.appendChild(tag);
+        });
+    }
+
+    // Profile Image
+    const imgContainer = document.getElementById('dynamic-profile-image');
+    const imgWrapper = document.querySelector('.about-image-container');
+    if (imgContainer && imgWrapper) {
+        if (data.profileImage) {
+            imgContainer.innerHTML = `<img src="${data.profileImage}" alt="Profile" class="profile-img">`;
+            imgWrapper.style.display = 'flex';
+        } else {
+            imgWrapper.style.display = 'none';
+        }
+    }
     
     // Projects Injection
     const grid = document.getElementById('dynamic-projects-grid');
@@ -183,6 +288,10 @@ function injectPortfolioData(data) {
     isDeleting = false;
     type();
 
+    // Re-observe newly injected content
+    const revealElements = document.querySelectorAll('.reveal, .reveal-item, .reveal-left, .reveal-right');
+    revealElements.forEach(el => revealObserver.observe(el));
+
     // Store globally for chatbot context
     window.currentPortfolioData = data;
 }
@@ -232,7 +341,7 @@ let charIndex = 0;
 let isDeleting = false;
 
 function type() {
-    const currentWords = window.portfolioRoles || words;
+    const currentWords = window.portfolioRoles && window.portfolioRoles.length > 0 ? window.portfolioRoles : words;
     const currentWord = currentWords[wordIndex];
     
     if (isDeleting) {
@@ -260,19 +369,11 @@ const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('active');
-            
-            // Animate progress bars if the element is the skills section container
-            if (entry.target.classList.contains('reveal') && entry.target.querySelector('.progress')) {
-                const bars = entry.target.querySelectorAll('.progress');
-                bars.forEach(bar => {
-                    bar.style.width = bar.getAttribute('data-width');
-                });
-            }
         }
     });
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.reveal, .reveal-item').forEach(el => revealObserver.observe(el));
+document.querySelectorAll('.reveal, .reveal-item, .reveal-left, .reveal-right').forEach(el => revealObserver.observe(el));
 
 // Project Filtering
 const filterBtns = document.querySelectorAll('.filter-btn');
@@ -563,7 +664,4 @@ function exportToPDF() {
 document.addEventListener('DOMContentLoaded', () => {
     initBuilder();
     new Chatbot();
-    if (localStorage.getItem('portfolio_builder_data')) {
-        type();
-    }
 });

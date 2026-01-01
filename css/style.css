@@ -1,12 +1,13 @@
 :root {
-    --primary: #38bdf8;
-    --primary-dark: #0ea5e9;
-    --bg: #030712;
-    --bg-alt: #111827;
-    --text: #f3f4f6;
-    --text-muted: #9ca3af;
-    --glass: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --primary: #ffffff; /* White text for premium contrast */
+    --primary-dark: #e5e5e5;
+    --accent: #38bdf8; /* Blueprint Blue */
+    --bg: #050505; /* Deep Space Black */
+    --bg-alt: #0a0a0a;
+    --text: #ffffff;
+    --text-muted: #a3a3a3;
+    --glass: rgba(5, 5, 5, 0.7); /* Darker, less glassy */
+    --glass-border: rgba(255, 255, 255, 0.15); /* Technical lines */
     --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -29,17 +30,23 @@ body {
     overflow-x: hidden;
 }
 
+h1, h2, h3, h4, h5, h6, .logo, .section-title, .builder-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
 }
 
-/* Custom Cursor */
+/* Custom Cursor - Engineering Crosshair style can be cool, keeping circle for now but white */
 .custom-cursor {
     width: 20px;
     height: 20px;
-    background: var(--primary);
+    background: transparent;
+    border: 1px solid var(--primary);
     border-radius: 50%;
     position: fixed;
     pointer-events: none;
@@ -50,7 +57,8 @@ body {
 
 .custom-cursor.link-hover {
     transform: scale(3);
-    background: white;
+    background: var(--primary);
+    mix-blend-mode: difference;
 }
 
 /* Navbar */
@@ -60,7 +68,7 @@ body {
     width: 100%;
     z-index: 1000;
     backdrop-filter: blur(12px);
-    background: rgba(3, 7, 18, 0.8);
+    background: rgba(5, 5, 5, 0.85); /* Deep cosmic black */
     border-bottom: 1px solid var(--glass-border);
 }
 
@@ -112,39 +120,43 @@ body {
     padding: 0 1rem;
 }
 
-.hero-bg {
+/* Cosmic Background */
+.cosmic-bg {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1) 0%, transparent 50%);
+    background: url('../images/cosmic_bg.png') no-repeat center center;
+    background-size: cover;
     z-index: -1;
+    opacity: 0.6; /* Subtle overlay */
+}
+.cosmic-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(5,5,5,0.2), #050505);
 }
 
 .badge {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    border-radius: 2rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 1.5rem;
+    display: none; /* Removing as per design request */
 }
 
 .hero h1 {
-    font-size: clamp(2.5rem, 8vw, 5rem);
-    font-weight: 800;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 700;
     line-height: 1.1;
-    margin-bottom: 1.5rem;
-    letter-spacing: -2px;
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
 }
 
 #typing-text {
-    color: var(--primary);
-    background: linear-gradient(to right, #38bdf8, #818cf8);
+    color: var(--accent);
+    background: linear-gradient(to right, var(--accent), #ffffff);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -231,39 +243,150 @@ body {
     letter-spacing: -1px;
 }
 
-/* Skills Grid with Progress Bars */
-.skills-grid {
+/* About Section Grid */
+.about-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: center;
 }
 
-.skill-item {
-    background: var(--glass);
-    padding: 1.5rem;
-    border-radius: 1rem;
-    border: 1px solid var(--glass-border);
-}
-
-.skill-info {
+.about-image-container {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.75rem;
-    font-weight: 600;
+    justify-content: center;
 }
 
-.progress-bar {
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
+.profile-frame {
+    width: 300px;
+    height: 380px;
+    border: 1px solid var(--glass-border);
+    padding: 1rem;
+    position: relative;
+    background: var(--glass);
+    transition: var(--transition);
 }
 
-.progress {
+.profile-frame::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 30px;
+    height: 30px;
+    border-top: 2px solid var(--accent);
+    border-left: 2px solid var(--accent);
+}
+
+.profile-frame:hover {
+    border-color: var(--accent);
+    transform: translateY(-5px);
+}
+
+.profile-img {
+    width: 100%;
     height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.2);
+    transition: var(--transition);
+}
+
+.profile-frame:hover .profile-img {
+    filter: grayscale(0);
+}
+
+@media (max-width: 968px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .profile-frame {
+        width: 250px;
+        height: 320px;
+    }
+}
+
+
+/* Skills & Chip Selection */
+.skills-selector-container {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.skill-category {
+    margin-bottom: 1.5rem;
+}
+
+.skill-category h4 {
+    color: var(--primary);
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.skill-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.skill-chip {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 2rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition);
+    user-select: none;
+}
+
+.skill-chip:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+.skill-chip.selected {
     background: var(--primary);
-    width: 0; /* Animated via JS */
-    transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--bg);
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+/* Dynamic Skills Grid on Home Page */
+.skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.skills-grid .skill-tag {
+    padding: 0.75rem 1.5rem;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    color: var(--text);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.skills-grid .skill-tag:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(56, 189, 248, 0.1);
+}
+
+.skills-grid .skill-tag span {
+    color: var(--primary);
 }
 
 /* Project Filtering */
@@ -298,12 +421,13 @@ body {
 
 .project-card {
     position: relative;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
     border-radius: 1.5rem;
     padding: 3rem;
     transition: var(--transition);
     overflow: hidden;
+    background-image: url('../images/tech_blueprint_solid.png');
+    background-size: cover;
+    background-blend-mode: screen;
 }
 
 .project-glow {
@@ -352,6 +476,37 @@ body {
     background: rgba(56, 189, 248, 0.03);
 }
 
+.problem-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.problem-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid var(--glass-border);
+    border-radius: 0.5rem;
+    color: var(--accent);
+}
+
+.problem-content .icon {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+
 /* Testimonials */
 .testimonials-grid {
     display: grid;
@@ -399,6 +554,74 @@ body {
 .reveal-item.active {
     opacity: 1;
     transform: scale(1);
+}
+
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-100px);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-left.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* Floating Animations */
+@keyframes float-y {
+    0%, 100% { transform: translateY(-20px); }
+    50% { transform: translateY(20px); }
+}
+
+@keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.floating-sat {
+    position: absolute;
+    top: 10%;
+    right: 5%;
+    width: 250px;
+    opacity: 0.8;
+    animation: float-y 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: screen; /* Removes black, keeping white lines */
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.3));
+}
+
+.rotating-gear {
+    position: absolute;
+    bottom: -100px;
+    left: -100px;
+    width: 400px;
+    opacity: 0.3;
+    animation: spin-slow 30s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+    mix-blend-mode: screen;
+}
+
+
+/* Nebula Accent */
+.nebula-accent {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: url('../images/cosmic_nebula_accent.png') no-repeat center center;
+    background-size: contain;
+    opacity: 0.4;
+    z-index: -1;
+    pointer-events: none;
+    mix-blend-mode: screen;
 }
 
 /* Contact Loader */
@@ -670,7 +893,7 @@ footer {
 .robot-head {
     width: 24px;
     height: 18px;
-    background: var(--primary);
+    background: var(--accent);
     border-radius: 4px;
     position: relative;
     animation: breathing 3s ease-in-out infinite;

@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style.css" />
@@ -24,6 +24,11 @@
           <div class="form-step active" data-step="1">
             <h3>Basic Information</h3>
             <div class="form-group">
+              <label>Profile Image</label>
+              <input type="file" id="profile-image-input" accept="image/*" />
+              <p class="input-hint">Square images work best.</p>
+            </div>
+            <div class="form-group">
               <label>Full Name</label>
               <input type="text" name="name" placeholder="Sumeet" required />
             </div>
@@ -37,8 +42,24 @@
               />
             </div>
             <button type="button" class="primary-btn next-step">
-              Next: About & Impact
+              Next: Key Skills
             </button>
+          </div>
+
+          <div class="form-step" data-step="1.5">
+            <h3>Key Skills & Technologies</h3>
+            <div class="skills-selector-container">
+              <!-- Categories and chips will be injected here by JS -->
+              <div id="skills-selection-root"></div>
+            </div>
+            <div class="step-btns">
+              <button type="button" class="secondary-btn prev-step">
+                Back
+              </button>
+              <button type="button" class="primary-btn next-step">
+                Next: About & Impact
+              </button>
+            </div>
           </div>
 
           <div class="form-step" data-step="2">
@@ -105,19 +126,12 @@
                   type="text"
                   name="p2_title"
                   placeholder="Project 2 Title"
-                  required
                 />
                 <textarea
                   name="p2_desc"
                   placeholder="Project 2 Description"
-                  required
                 ></textarea>
-                <input
-                  type="text"
-                  name="p2_tech"
-                  placeholder="React, Node"
-                  required
-                />
+                <input type="text" name="p2_tech" placeholder="React, Node" />
               </div>
               <div class="project-input-group">
                 <input
@@ -196,7 +210,6 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
       <div class="hero-content reveal">
-        <span class="badge">Available for Work</span>
         <h1>
           <span id="dynamic-hero-name">Sumeet's</span> Digital <br /><span
             id="typing-text"
@@ -215,14 +228,20 @@
           </button>
         </div>
       </div>
-      <div class="hero-bg"></div>
+      <!-- Cosmic Background -->
+      <div class="cosmic-bg"></div>
     </section>
 
     <!-- About -->
     <section id="about" class="section">
-      <div class="container reveal">
+      <div class="container reveal-left">
         <h2 class="section-title">About Me</h2>
         <div class="about-grid">
+          <div class="about-image-container">
+            <div id="dynamic-profile-image" class="profile-frame">
+              <!-- Profile Image injected here -->
+            </div>
+          </div>
           <div class="about-text">
             <p id="dynamic-bio">
               I am a Computer Science student passionate about the intersection
@@ -237,12 +256,30 @@
 
     <!-- Impact Section -->
     <section id="impact" class="section dark">
-      <div class="container reveal">
-        <h2 class="section-title">Real-World Impact</h2>
+      <div class="container">
+        <h2 class="section-title reveal">Real-World Impact</h2>
         <div class="problem-card">
-          <div class="problem-content">
+          <div class="problem-content reveal-right">
             <div class="problem-header">
-              <span class="icon">⚠️</span>
+              <!-- Engineering Icon: Warning/Circuit -->
+              <span class="icon">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                  ></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+              </span>
               <h3>The Problem</h3>
             </div>
             <p id="dynamic-problem">
@@ -251,9 +288,30 @@
               gap.
             </p>
           </div>
-          <div class="solution-content">
+          <div class="solution-content reveal-left">
             <div class="problem-header">
-              <span class="icon">🚀</span>
+              <!-- Engineering Icon: Rocket/Launch -->
+              <span class="icon">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"
+                  ></path>
+                  <path
+                    d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"
+                  ></path>
+                  <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                  <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                </svg>
+              </span>
               <h3>Proposed Solution</h3>
             </div>
             <h4 id="dynamic-solution-name">BridgeGap</h4>
@@ -271,39 +329,8 @@
     <section id="skills" class="section">
       <div class="container reveal">
         <h2 class="section-title">Technical Arsenal</h2>
-        <div class="skills-grid">
-          <div class="skill-item">
-            <div class="skill-info">
-              <span>Frontend Development</span><span>90%</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress" data-width="90%"></div>
-            </div>
-          </div>
-          <div class="skill-item">
-            <div class="skill-info">
-              <span>Backend (Node/Python)</span><span>75%</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress" data-width="75%"></div>
-            </div>
-          </div>
-          <div class="skill-item">
-            <div class="skill-info">
-              <span>UI/UX Design</span><span>85%</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress" data-width="85%"></div>
-            </div>
-          </div>
-          <div class="skill-item">
-            <div class="skill-info">
-              <span>Database Management</span><span>80%</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress" data-width="80%"></div>
-            </div>
-          </div>
+        <div class="skills-grid" id="dynamic-skills-grid">
+          <!-- Skills will be injected here -->
         </div>
       </div>
     </section>
