@@ -60,6 +60,28 @@ Transform your static developer presence into a high-end, dynamic portfolio expe
 
 ---
 
+## 🐳 Run with Docker
+
+### Prerequisites
+
+- Docker Desktop installed
+
+### Build the Docker image
+
+```bash
+docker build -t git-workflow-app .
+```
+
+### Run the container
+
+```bash
+docker run -d -p 8080:80 git-workflow-app
+```
+
+Open [http://localhost:8080](http://localhost:8080) to view your portfolio.
+
+---
+
 ## How to Extend
 
 - **Add More Projects**: Insert a new project card in `index.html` with a `data-category`.
