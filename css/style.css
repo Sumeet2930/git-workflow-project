@@ -130,7 +130,7 @@ h1, h2, h3, h4, h5, h6, .logo, .section-title, .builder-header h2 {
     background: url('../images/cosmic_bg.png') no-repeat center center;
     background-size: cover;
     z-index: -1;
-    opacity: 0.6; /* Subtle overlay */
+    opacity: 0.8; /* Increased opacity */
 }
 .cosmic-bg::after {
     content: '';
@@ -233,6 +233,46 @@ h1, h2, h3, h4, h5, h6, .logo, .section-title, .builder-header h2 {
 
 .section.dark {
     background: var(--bg-alt);
+    position: relative;
+}
+
+.section.dark::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../images/tech_blueprint_overlay.png') repeat;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.section.dark .container {
+    position: relative;
+    z-index: 1;
+}
+
+#about {
+    position: relative;
+    overflow: hidden;
+}
+
+#about::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: url('../images/about_bg.png') no-repeat center center;
+    background-size: contain;
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    transform: translateY(-50%);
 }
 
 .section-title {
@@ -590,6 +630,9 @@ h1, h2, h3, h4, h5, h6, .logo, .section-title, .builder-header h2 {
     top: 10%;
     right: 5%;
     width: 250px;
+    height: 250px;
+    background: url('../images/technical_satellite_drawing.png') no-repeat center center;
+    background-size: contain;
     opacity: 0.8;
     animation: float-y 6s ease-in-out infinite;
     pointer-events: none;
@@ -603,6 +646,9 @@ h1, h2, h3, h4, h5, h6, .logo, .section-title, .builder-header h2 {
     bottom: -100px;
     left: -100px;
     width: 400px;
+    height: 400px;
+    background: url('../images/technical_gear_drawing.png') no-repeat center center;
+    background-size: contain;
     opacity: 0.3;
     animation: spin-slow 30s linear infinite;
     pointer-events: none;

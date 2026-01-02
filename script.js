@@ -154,6 +154,9 @@ if (builderForm) {
             problem: formData.get('problem'),
             solution: formData.get('solution'),
             bio: formData.get('bio'),
+            linkedin: formData.get('linkedin'),
+            twitter: formData.get('twitter'),
+            github: formData.get('github'),
             primaryColor: formData.get('primaryColor'),
             projects: [
                 {
@@ -232,6 +235,24 @@ function injectPortfolioData(data) {
         } else {
             imgWrapper.style.display = 'none';
         }
+    }
+
+    // Social Links
+    const footerLinkedin = document.getElementById('footer-linkedin');
+    const footerGithub = document.getElementById('footer-github');
+    const footerTwitter = document.getElementById('footer-twitter');
+
+    if (footerLinkedin) {
+        footerLinkedin.href = data.linkedin || '#';
+        footerLinkedin.style.display = data.linkedin ? 'inline-block' : 'none';
+    }
+    if (footerGithub) {
+        footerGithub.href = data.github || '#';
+        footerGithub.style.display = data.github ? 'inline-block' : 'none';
+    }
+    if (footerTwitter) {
+        footerTwitter.href = data.twitter || '#';
+        footerTwitter.style.display = data.twitter ? 'inline-block' : 'none';
     }
     
     // Projects Injection
@@ -624,40 +645,138 @@ function exportToPDF() {
     const doc = new jsPDF();
     const data = JSON.parse(localStorage.getItem('portfolio_builder_data') || '{}');
 
-    if (!data.name) return alert("No portfolio data found!");
+    if (!data.name) return alert("No portfolio data found! Please generate your portfolio first.");
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.text(data.name, 20, 30);
-    
-    doc.setFontSize(14);
-    doc.setFont("helvetica", "normal");
-    doc.text(data.roles?.join(' | ') || '', 20, 40);
-    
-    doc.line(20, 45, 190, 45);
-    
-    doc.setFont("helvetica", "bold");
-    doc.text("Professional Bio", 20, 60);
-    doc.setFont("helvetica", "normal");
-    const bioLines = doc.splitTextToSize(data.bio || '', 160);
-    doc.text(bioLines, 20, 70);
-    
-    doc.setFont("helvetica", "bold");
-    doc.text("Impact Statement", 20, 100);
-    doc.setFont("helvetica", "normal");
-    doc.text(`Problem: ${data.problem}`, 20, 110, { maxWidth: 160 });
-    doc.text(`Solution: ${data.solutionName} - ${data.solution}`, 20, 130, { maxWidth: 160 });
-    
-    doc.setFont("helvetica", "bold");
-    doc.text("Featured Projects", 20, 160);
-    doc.setFont("helvetica", "normal");
-    let y = 170;
-    data.projects?.forEach(p => {
-        doc.text(`• ${p.title}: ${p.desc}`, 20, y, { maxWidth: 160 });
-        y += 15;
-    });
+    // PDF Configuration
+    const margin = 20;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const contentWidth = pageWidth - (2 * margin);
+    let y = 25;
 
-    doc.save(`${data.name.replace(/\s+/g, '-')}-portfolio.pdf`);
+    // Helper: Add Section Header
+    const addSectionHeader = (title) => {
+        y += 10;
+        doc.setFont("times", "bold");
+        doc.setFontSize(14);
+        doc.text(title.toUpperCase(), margin, y);
+        y += 2;
+        doc.setLineWidth(0.5);
+        doc.line(margin, y, pageWidth - margin, y);
+        y += 7;
+    };
+
+    // Header: Name & Roles
+    doc.setFont("times", "bold");
+    doc.setFontSize(26);
+    doc.text(data.name, margin, y);
+    y += 10;
+    
+    doc.setFontSize(12);
+    doc.setFont("times", "italic");
+    const rolesStr = data.roles?.join(' | ') || 'Professional';
+    doc.text(rolesStr, margin, y);
+    y += 6;
+
+    // Social Links in Header
+    doc.setFontSize(10);
+    doc.setFont("times", "normal");
+    doc.setTextColor(56, 189, 248); // Use primary-like color for links
+    let socialLinks = [];
+    if (data.linkedin) socialLinks.push(`LinkedIn: ${data.linkedin}`);
+    if (data.github) socialLinks.push(`GitHub: ${data.github}`);
+    if (data.twitter) socialLinks.push(`Twitter: ${data.twitter}`);
+    
+    if (socialLinks.length > 0) {
+        const socialStr = socialLinks.join('  |  ');
+        doc.text(socialStr, margin, y);
+        y += 4;
+    }
+    doc.setTextColor(0); // Reset to black
+
+    // Section: Professional Summary
+    addSectionHeader("Professional Summary");
+    doc.setFont("times", "normal");
+    doc.setFontSize(11);
+    const bioLines = doc.splitTextToSize(data.bio || '', contentWidth);
+    doc.text(bioLines, margin, y);
+    y += (bioLines.length * 6) + 5;
+
+    // Section: Technical Skills
+    if (data.skills && data.skills.length > 0) {
+        addSectionHeader("Technical Skills");
+        doc.setFont("times", "normal");
+        doc.setFontSize(11);
+        const skillsStr = data.skills.join(', ');
+        const skillLines = doc.splitTextToSize(skillsStr, contentWidth);
+        doc.text(skillLines, margin, y);
+        y += (skillLines.length * 6) + 5;
+    }
+
+    // Section: Impact & Innovation
+    if (data.problem || data.solution) {
+        addSectionHeader("Impact & Innovation");
+        
+        // Problem
+        doc.setFont("times", "bold");
+        doc.text("Problem Addressed:", margin, y);
+        y += 6;
+        doc.setFont("times", "normal");
+        const probLines = doc.splitTextToSize(data.problem || '', contentWidth);
+        doc.text(probLines, margin, y);
+        y += (probLines.length * 6) + 4;
+
+        // Solution
+        doc.setFont("times", "bold");
+        doc.text(`Solution: ${data.solutionName || 'The Project'}`, margin, y);
+        y += 6;
+        doc.setFont("times", "normal");
+        const solLines = doc.splitTextToSize(data.solution || '', contentWidth);
+        doc.text(solLines, margin, y);
+        y += (solLines.length * 6) + 5;
+    }
+
+    // Section: Featured Projects
+    if (data.projects && data.projects.length > 0) {
+        addSectionHeader("Featured Projects");
+        
+        data.projects.forEach(p => {
+            // Project Title
+            doc.setFont("times", "bold");
+            doc.setFontSize(12);
+            doc.text(p.title, margin, y);
+            y += 6;
+
+            // Project Tech
+            if (p.tech && p.tech.length > 0) {
+                doc.setFont("times", "italic");
+                doc.setFontSize(10);
+                doc.text(`Technologies: ${p.tech.join(', ')}`, margin, y);
+                y += 5;
+            }
+
+            // Project Description
+            doc.setFont("times", "normal");
+            doc.setFontSize(11);
+            const descLines = doc.splitTextToSize(p.desc || '', contentWidth);
+            doc.text(descLines, margin, y);
+            y += (descLines.length * 6) + 8;
+
+            // Page break check
+            if (y > 270) {
+                doc.addPage();
+                y = 20;
+            }
+        });
+    }
+
+    // Footer
+    const date = new Date().toLocaleDateString();
+    doc.setFontSize(9);
+    doc.setFont("times", "italic");
+    doc.setTextColor(100);
+    doc.text(`Generated via Portfolio Builder | ${date}`, margin, 285);
+
+    doc.save(`${data.name.replace(/\s+/g, '-')}-Resume.pdf`);
 }
 
 // Initialize on load
