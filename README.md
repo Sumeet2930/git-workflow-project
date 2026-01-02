@@ -25,6 +25,11 @@ Transform your static developer presence into a high-end, dynamic portfolio expe
 - **Interactive Card Glow**: Project cards feature a mouse-following radial glow effect.
 - **Animated Skills**: Data-driven progress bars that animate based on skill levels.
 
+### 🤖 AI & Utilities
+
+- **AI Personal Assistant**: Built-in chatbot with voice recognition and text-to-speech, providing context-aware responses about your portfolio.
+- **Smart Export**: Export your portfolio data to JSON for backup or generate a professional PDF resume instantly using `jsPDF`.
+
 ---
 
 ## Technical Stack
@@ -32,6 +37,8 @@ Transform your static developer presence into a high-end, dynamic portfolio expe
 - **Structure**: Semantic HTML5
 - **Styling**: Vanilla CSS3 (Custom Variables, Flexbox, CSS Grid, Keyframe Animations)
 - **Logic**: Vanilla JavaScript (ES6+, DOM Manipulation, LocalStorage API, IntersectionObserver)
+- **AI/Voice**: Web Speech API (SpeechRecognition & SpeechSynthesis)
+- **Utilities**: `jspdf` for document generation
 
 ---
 
@@ -82,6 +89,16 @@ Open [http://localhost:8080](http://localhost:8080) to view your portfolio.
 
 ---
 
+## 🚀 Deployment
+
+This project is configured for seamless deployment on **Railway** via GitHub integration.
+
+1.  **Push to GitHub**: Your changes are automatically detected.
+2.  **Automatic Build**: Railway builds the Docker image from the `Dockerfile`.
+3.  **Live URL**: Your portfolio is instantly live on a public URL.
+
+---
+
 ## How to Extend
 
 - **Add More Projects**: Insert a new project card in `index.html` with a `data-category`.
@@ -91,3 +108,11 @@ Open [http://localhost:8080](http://localhost:8080) to view your portfolio.
 ---
 
 Developed with ❤️ for developers who want a premium portfolio with zero hassle.
+
+---
+
+## 🔮 Future Roadmap
+
+- [ ] **Real AI Integration**: Connect to Google Gemini API for dynamic, non-scripted responses.
+- [ ] **Backend Database**: PostgreSQL + Node.js for robust data persistence.
+- [ ] **SEO Optimization**: Open Graph tags and sitemap generation.
